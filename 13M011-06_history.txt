@@ -1,0 +1,37 @@
+===== [ History of fileset ART/13M011-06/13M011-06 ] =====
+
+
+-----[ Revision 2.4 ]-----
+[ 2013-09-12 09:55:23 by gv ]
+R: Missing category noref for subfileset m_tmr
+M: Add catmap:noref=noref for subfileset m_tmr
+
+-----[ Revision 2.3 ]-----
+[ 2013-09-10 11:42:41 by gv ]
+R: Category noref missing in subfileset COM/DRIVERS/MDIS_LL/m_tmr.
+M: Add category noref for MDIS5 compatiblity.
+
+-----[ Revision 2.2 ]-----
+[ 2013-09-10 11:13:29 by gv ]
+R: Porting to MDIS5
+M: Changed according to MDIS porting guide 0.9
+
+-----[ Revision 2.1 ]-----
+[ 2006-03-07 10:16:33 by DPfeuffer ]
+COM/DRIVERS/MDIS_LL/M011/DRIVER/COM/m11_drv.c
+ - bugfix: M11_SetStat(M11_SIGCLR_Hx): prevent to remove not installed signals
+ - M11_SetStat(), M11_GetStat(): M_TMR_XXX description fixed
+COM/TOOLS/M_TMR/M_TMR_VERI/COM/m_tmr_veri.c
+ - Problem fix: declare G_sigCnt as volatile (problem occurred with GCC/VxWorks)
+
+-----[ Revision 2.0 ]-----
+[ 2004-04-26 17:52:51 by cs ]
+Minor modifications for MDIS4/2004 conformity
+Added swapped access variant
+Bugix: fixed M11_Irq answer
+       now output of LL_IRQ_DEVICE if interrupt caused by device
+
+-----[ Revision 1.1 ]-----
+[ 1999-11-03 15:49:11 by kp ]
+Initial Revision
+

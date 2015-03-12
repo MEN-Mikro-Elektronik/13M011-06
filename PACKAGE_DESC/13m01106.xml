@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSPY v5 rel. 4 U (http://www.xmlspy.com) by Klaus Popp (MEN Mikro Elektronik GmbH) -->
+<package xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="packagedesc.xsd">
+	<name>13m01106</name>
+	<description>MDIS5 driver package for MEN M11 M-Module</description>
+	<date>2013-09-12</date>
+	<revision>2.4</revision>
+	<docroot>DRIVERS/MDIS_LL/M011/DOC/m11_drv.html</docroot>
+	<modellist>
+		<model>
+			<hwname>M11</hwname>
+			<description>16 bit TTL M-Module with MC68230</description>
+			<devtype>MDIS</devtype>
+			<autoid>
+				<mmoduleid>0x5346000b</mmoduleid>
+			</autoid>
+			<busif>M-Module</busif>
+			<swmodulelist>
+				<swmodule>
+					<name>m11</name>
+					<description>Driver for M11</description>
+					<type>Low Level Driver</type>
+					<makefilepath>M011/DRIVER/COM/driver.mak</makefilepath>
+				</swmodule>
+			</swmodulelist>
+		</model>
+	</modellist>
+	<settinglist>
+		<setting>
+			<name>ID_CHECK</name>
+			<description>Define wether M-Module ID-PROM is checked</description>
+			<type>U_INT32</type>
+			<defaultvalue>1</defaultvalue>
+			<choises>
+				<choise>
+					<value>1</value>
+					<description>enable</description>
+				</choise>
+				<choise>
+					<value>0</value>
+					<description>disable -- ignore IDPROM</description>
+				</choise>
+			</choises>
+		</setting>
+	</settinglist>
+	<swmodulelist>
+		<swmodule>
+			<name>m11_simp</name>
+			<description>Simple example program for the M11 driver</description>
+			<type>Driver Specific Tool</type>
+			<makefilepath>M011/EXAMPLE/M11_SIMP/COM/program.mak</makefilepath>
+		</swmodule>
+		<swmodule>
+			<name>m11_port_veri</name>
+			<description>Verify M11 driver port functionality</description>
+			<type>Driver Specific Tool</type>
+			<makefilepath>M011/TOOLS/M11_PORT_VERI/COM/program.mak</makefilepath>
+		</swmodule>
+		<swmodule>
+			<name>m11_read</name>
+			<description>Read all M11 channels and print it out</description>
+			<type>Driver Specific Tool</type>
+			<makefilepath>M011/TOOLS/M11_READ/COM/program.mak</makefilepath>
+		</swmodule>
+		<swmodule>
+			<name>m11_write</name>
+			<description>Configure and write to M011</description>
+			<type>Driver Specific Tool</type>
+			<makefilepath>M011/TOOLS/M11_WRITE/COM/program.mak</makefilepath>
+		</swmodule>
+		<swmodule>
+			<name>m_tmr_test</name>
+			<description>Test tool for MDIS drivers implementing TMR profile</description>
+			<type>Common Tool</type>
+			<makefilepath>M_TMR/M_TMR_TEST/COM/program.mak</makefilepath>
+		</swmodule>
+		<swmodule>
+			<name>m_tmr_veri</name>
+			<description>Verification tool for MDIS drivers implementing TMR profile</description>
+			<type>Common Tool</type>
+			<makefilepath>M_TMR/M_TMR_VERI/COM/program.mak</makefilepath>
+		</swmodule>
+	</swmodulelist>
+</package>

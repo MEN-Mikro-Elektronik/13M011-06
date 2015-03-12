@@ -1,0 +1,399 @@
+Function Description
+====================
+Tue Mar  7 10:07:51 WEST 2006
+ 
+Overview of all Functions
+-------------------------
+
+M11_GetEntry           - Initialize driver's jump table 
+M11_Init               - Allocate and return low-level handle, initialize hardware 
+M11_Exit               - De-initialize hardware and clean up memory 
+M11_Read               - Read a value from the device 
+M11_Write              - Write a value to the device 
+M11_SetStat            - Set the driver status 
+M11_GetStat            - Get the driver status 
+M11_BlockRead          - Read a data block from the device (NOT SUPPORTED FOR M11) 
+M11_BlockWrite         - Write a data block to the device (NOT SUPPORTED FOR M11) 
+M11_Irq                - Interrupt service routine 
+M11_Info               - Get information about hardware and driver requirements 
+ 
+
+Function M11_GetEntry()
+-----------------------
+
+Syntax:
+    #ifdef _ONE_NAMESPACE_PER_DRIVER_
+        extern void LL_GetEntry( LL_ENTRY* drvP )
+    #else
+        extern void M11_GetEntry( LL_ENTRY* drvP )
+    #endif
+
+Description:
+    Initialize driver's jump table
+
+Input:
+    ---
+
+Output:
+    drvP  pointer to the initialized jump table structure
+
+
+Function M11_Init()
+-------------------
+
+Syntax:
+    static int32 M11_Init(
+        DESC_SPEC       *descP,
+        OSS_HANDLE      *osHdl,
+        MACCESS         *ma,
+        OSS_SEM_HANDLE  *devSemHdl,
+        OSS_IRQ_HANDLE  *irqHdl,
+        LL_HANDLE       **llHdlP
+    )
+
+Description:
+    Allocate and return low-level handle, initialize hardware
+
+    The function initializes all channels with the 
+    definitions made in the descriptor. The interrupt 
+    is disabled.
+
+    The following descriptor keys are used:
+
+    Descriptor key        Default          Range
+    --------------------  ---------------  -------------
+    DEBUG_LEVEL_DESC      OSS_DBG_DEFAULT  see dbg.h
+    DEBUG_LEVEL           OSS_DBG_DEFAULT  see dbg.h
+    ID_CHECK              1                0..1 
+
+    Note to ID_CHECK: Not all M11 modules have an IDPROM. 
+    So ID_CHECK is disabled by default.
+
+Input:
+    descSpec   pointer to descriptor data
+    osHdl      oss handle
+    ma         hw access handle
+    devSemHdl  device semaphore handle
+    irqHdl     irq handle
+
+Output:
+    llHdlP     pointer to low-level driver handle
+    return     success (0) or error code
+
+
+Function M11_Exit()
+-------------------
+
+Syntax:
+    static int32 M11_Exit(
+       LL_HANDLE    **llHdlP
+    )
+
+Description:
+    De-initialize hardware and clean up memory
+
+    The function deinitializes all channels by 
+    disabling the timer and set all ports to input. 
+    The interrupt is disabled.
+
+Input:
+    llHdlP    pointer to low-level driver handle
+
+Output:
+    return    success (0) or error code
+
+
+Function M11_Read()
+-------------------
+
+Syntax:
+    static int32 M11_Read(
+        LL_HANDLE *llHdl,
+        int32 ch,
+        int32 *valueP
+    )
+
+Description:
+    Read a value from the device
+
+    The function reads the value from the current channel.
+
+    Channels 0,1,2,3 (Port A,B,C,Hx): For all pins configured as inputs
+    reads the raw unbuffered values. Pins configured as outputs return the
+    value from the output latch.
+
+    Channel 4 (Timer): Reads the current timer value
+
+    If configured for 1X16 mode, Channel 1 does not exist. Channel 0 returns
+    a 16 bit value (D15..D8 = Port A7..A0 and D7..D0 = Port B7..B0)
+
+Input:
+    llHdl    low-level handle
+    ch       current channel
+
+Output:
+    valueP   read value
+    return   success (0) or error code
+
+
+Function M11_Write()
+--------------------
+
+Syntax:
+    static int32 M11_Write(
+        LL_HANDLE *llHdl,
+        int32 ch,
+        int32 value
+    )
+
+Description:
+    Write a value to the device
+
+    The function writes a value to the current channel.
+
+    Channels 0,1,2 (Port A,B,C): directly updates all pins configured as 
+    outputs.
+
+    Channel 3 (Hx) returns always ERR_LL_ILL_DIR
+
+    Channel 4 (Timer): writes the timer preload register. Restarts the 
+    timer if it was started before.
+
+Input:
+    llHdl    low-level handle
+    ch       current channel
+    value    value to write 
+
+Output:
+    return   success (0) or error code
+
+
+Function M11_SetStat()
+----------------------
+
+Syntax:
+    static int32 M11_SetStat(
+        LL_HANDLE *llHdl,
+        int32  code,
+        int32  ch,
+        INT32_OR_64 value32_or_64 
+    )
+
+Description:
+    Set the driver status
+
+    The following status codes are supported:
+
+    Code                 Description                     Values
+    -------------------  ------------------------------  ----------
+    M11_SETPINS          set pins in curr. channel
+    M11_CLRPINS          clear pins in curr. channel
+    M11_PORTCFG          define port A/B mode            M11_2X8/M11_1X16
+    M11_PINDIR           setup data direction reg.       
+    M11_SIGSET_H[1..4]   install signal for Hx pin       sigCode
+                         and enable Hx IRQ
+    M11_SIGCLR_H[1..4]   remove signal for Hx pin        
+    M11_HXSENSE          define polarity for Hx IRQ
+    M_TMR_RUN            perform timer action            M_TMR_STOP
+                                                         M_TMR_START_ONE_SHOT
+                                                         M_TMR_START_FREE_RUNNING
+
+    M_TMR_SIGSET_ZERO    install signal for timer        sigCode
+    M_TMR_SIGCLR_ZERO    remove signal for timer         
+    M_LL_DEBUG_LEVEL     driver debug level              see dbg.h
+    M_MK_IRQ_ENABLE      interrupt enable                0..1
+    M_LL_IRQ_COUNT       interrupt counter               0..max
+
+Input:
+    llHdl         low-level handle
+    code          status code
+    ch            current channel
+    value32_or_64 data or
+                  pointer to block data structure (M_SG_BLOCK)(*)
+                  (*) = for block status codes
+
+Output:
+    return     success (0) or error code
+
+
+Function M11_GetStat()
+----------------------
+
+Syntax:
+    static int32 M11_GetStat(
+        LL_HANDLE *llHdl,
+        int32  code,
+        int32  ch,
+        INT32_OR_64 *value32_or_64P
+    )
+
+Description:
+    Get the driver status
+
+    The following status codes are supported:
+
+    Code                 Description                     Values
+    -------------------  ------------------------------  ----------
+    M11_PORTCFG          get port A/B mode               M11_2X8/M11_1X16
+    M11_PINDIR           get data direction reg.       
+    M11_SIGSET_H[1..4]   get install signal for Hx pin   sigCode
+    M11_HXSENSE          get polarity of Hx IRQ
+    M_TMR_RESOLUTION     get timer resolution (ticks/sec) 250000
+    M_TMR_RUN            get timer state                 M_TMR_STOP
+                                                         M_TMR_START_ONE_SHOT
+                                                         M_TMR_START_FREE_RUNNING
+
+    M_TMR_SIGSET_ZERO    get signal for timer            sigCode
+
+    M_LL_DEBUG_LEVEL     driver debug level              see dbg.h
+    M_LL_CH_NUMBER       number of channels              5
+    M_LL_CH_DIR          direction of curr. chan.        M_CH_IN for ch 3
+                                                         M_CH_INOUT otherwise
+    M_LL_CH_LEN          length of curr. ch. [bits]      see code
+    M_LL_CH_TYP          description of curr. chan.      M_CH_BINARY fpr ch0..3
+                                                         M_CH_PROFILE_TMR ch4
+    M_LL_IRQ_COUNT       interrupt counter               0..max
+    M_LL_ID_CHECK        EEPROM is checked               0..1
+    M_LL_ID_SIZE         EEPROM size [bytes]             128
+    M_LL_BLK_ID_DATA     EEPROM raw data                 -
+    M_MK_BLK_REV_ID      ident function table ptr        -
+
+Input:
+    llHdl          low-level handle
+    code           status code
+    ch             current channel
+    value32_or_64P pointer to block data structure (M_SG_BLOCK)  (*) 
+                   (*) = for block status codes
+
+Output:
+    value32_or_64P data ptr or
+                   pointer to block data structure (M_SG_BLOCK)  (*) 
+    return         success (0) or error code
+                   (*) = for block status codes
+
+
+Function M11_BlockRead()
+------------------------
+
+Syntax:
+    static int32 M11_BlockRead(
+         LL_HANDLE *llHdl,
+         int32     ch,
+         void      *buf,
+         int32     size,
+         int32     *nbrRdBytesP
+    )
+
+Description:
+    Read a data block from the device (NOT SUPPORTED FOR M11)
+
+Input:
+    llHdl        low-level handle
+    ch           current channel
+    buf          data buffer
+    size         data buffer size
+
+Output:
+    nbrRdBytesP  number of read bytes
+    return       success (0) or error code
+
+
+Function M11_BlockWrite()
+-------------------------
+
+Syntax:
+    static int32 M11_BlockWrite(
+         LL_HANDLE *llHdl,
+         int32     ch,
+         void      *buf,
+         int32     size,
+         int32     *nbrWrBytesP
+    )
+
+Description:
+    Write a data block to the device (NOT SUPPORTED FOR M11)
+
+Input:
+    llHdl        low-level handle
+    ch           current channel
+    buf          data buffer
+    size         data buffer size
+
+Output:
+    nbrWrBytesP  number of written bytes
+    return       success (0) or error code
+
+
+Function M11_Irq()
+------------------
+
+Syntax:
+    static int32 M11_Irq(
+       LL_HANDLE *llHdl
+    )
+
+Description:
+    Interrupt service routine
+
+    The interrupt is triggered when a timer or Hx interrupt
+    occurs.
+
+    If the driver can detect the interrupt's cause it returns
+    LL_IRQ_DEVICE or LL_IRQ_DEV_NOT, otherwise LL_IRQ_UNKNOWN.
+
+Input:
+    llHdl    low-level handle
+
+Output:
+    return   LL_IRQ_DEVICE    irq caused by device
+             LL_IRQ_DEV_NOT   irq not caused by device
+             LL_IRQ_UNKNOWN   unknown
+
+
+Function M11_Info()
+-------------------
+
+Syntax:
+    static int32 M11_Info(
+       int32  infoType,
+       ...
+    )
+
+Description:
+    Get information about hardware and driver requirements
+
+    The following info codes are supported:
+
+    Code                      Description
+    ------------------------  -----------------------------
+    LL_INFO_HW_CHARACTER      hardware characteristics
+    LL_INFO_ADDRSPACE_COUNT   nr of required address spaces
+    LL_INFO_ADDRSPACE         address space information
+    LL_INFO_IRQ               interrupt required
+    LL_INFO_LOCKMODE          process lock mode required
+
+    The LL_INFO_HW_CHARACTER code returns all address and 
+    data modes (ORed) which are supported by the hardware
+    (MDIS_MAxx, MDIS_MDxx).
+
+    The LL_INFO_ADDRSPACE_COUNT code returns the number
+    of address spaces used by the driver.
+
+    The LL_INFO_ADDRSPACE code returns information about one
+    specific address space (MDIS_MAxx, MDIS_MDxx). The returned 
+    data mode represents the widest hardware access used by 
+    the driver.
+
+    The LL_INFO_IRQ code returns whether the driver supports an
+    interrupt routine (TRUE or FALSE).
+
+    The LL_INFO_LOCKMODE code returns which process locking
+    mode the driver needs (LL_LOCK_xxx).
+
+Input:
+    infoType     info code
+    ...          argument(s)
+
+Output:
+    return       success (0) or error code
+

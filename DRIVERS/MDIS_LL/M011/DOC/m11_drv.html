@@ -1,0 +1,414 @@
+<html>
+<head>
+<title>M011 driver</title>
+<style type=text/css>
+    Body { background-color: #ffffff; }
+    A:link { color: #c50038; }
+    A:hover { color: #28669b; }
+    P, H1, H2, H3, H3, H5, LI {
+        color: #434343;
+        font-family: Arial, Helvetica, Univers;
+    }
+    P, LI { font-size: 9.000000pt; }
+</style>
+</head>
+<body>
+<h1>M011 driver</h1>
+<p>Tue Mar  7 10:07:50 WEST 2006</p>
+<h2>Overview of all Functions</h2>
+<a name="chapt0"><a href="#intro0"><h3>Low-level driver for M11 modules</h3></a>
+<TABLE border=1>
+<TR><TD><P><B>Function</B></P></TD><TD><P><B>Description</B></P></TD></TR>
+
+<TR><TD><P><a href="#M11_GetEntry">M11_GetEntry</a></P></TD><TD><P>Initialize driver's jump table </P></TD></TR>
+<TR><TD><P><a href="#M11_Init">M11_Init</a></P></TD><TD><P>Allocate and return low-level handle, initialize hardware </P></TD></TR>
+<TR><TD><P><a href="#M11_Exit">M11_Exit</a></P></TD><TD><P>De-initialize hardware and clean up memory </P></TD></TR>
+<TR><TD><P><a href="#M11_Read">M11_Read</a></P></TD><TD><P>Read a value from the device </P></TD></TR>
+<TR><TD><P><a href="#M11_Write">M11_Write</a></P></TD><TD><P>Write a value to the device </P></TD></TR>
+<TR><TD><P><a href="#M11_SetStat">M11_SetStat</a></P></TD><TD><P>Set the driver status </P></TD></TR>
+<TR><TD><P><a href="#M11_GetStat">M11_GetStat</a></P></TD><TD><P>Get the driver status </P></TD></TR>
+<TR><TD><P><a href="#M11_BlockRead">M11_BlockRead</a></P></TD><TD><P>Read a data block from the device (NOT SUPPORTED FOR M11) </P></TD></TR>
+<TR><TD><P><a href="#M11_BlockWrite">M11_BlockWrite</a></P></TD><TD><P>Write a data block to the device (NOT SUPPORTED FOR M11) </P></TD></TR>
+<TR><TD><P><a href="#M11_Irq">M11_Irq</a></P></TD><TD><P>Interrupt service routine </P></TD></TR>
+<TR><TD><P><a href="#M11_Info">M11_Info</a></P></TD><TD><P>Get information about hardware and driver requirements </P></TD></TR>
+</TABLE>
+ 
+<a name="intro0"><h1>Low-level driver for M11 modules </h1></a>
+<pre>
+The M11 is an M-Module with an 68230 chip.
+
+The MDIS4 driver will not support all of the 68230 features.
+
+It will support:
+
+- 2x8-Mode: Port A and B are used as two 8 bit input or output ports 
+  (channel 0 and 1). Each pin can be defined seperately as in or output. 
+  Both Input and output is unbuffered. No handshakelines are used.
+
+- 1x16 Mode: Port A and B form an 16 bit input or output. 
+  In this mode, data direction can be defined for the whole 16 bit port 
+  only, not for each pin. Writing to the port changes the data on Port A 
+  and B at the same time. Input and output can be done on channel 0. 
+  Channel 1 does not exist in this mode.
+
+- Port C: (channel 2) Forms a two bit input/output port.  
+  Each pin can be defined seperately as in or output. 
+
+- Handshake lines H1..H4 (channel 3) can be used as general purpose 
+  input pins, that can generate interrupts (signals) at a configurable 
+  edge. H3 and H4 cannot generate interrupts in 1x16 mode.
+
+- Timer (channel 4): Compliant to MDIS Timer Profile (first device 
+  that defines MDIS Timer profile). Can be used to produce one-shot 
+  timeouts or periodic interrupts (signals). A write to the channel 
+  sets the initial timer value. A read from the device reads the 
+  current timer value. The timer is started and stopped with SetStats 
+  M_TMR_RUN
+
+Features of the MDIS3 driver that will be removed or changed:
+- Buffers for input/output removed (senseless) 
+- In 2x8 mode, data direction can be defined for each pin seperately
+- One shot mode for timer added
+- Timer will not be resetted when read
+- Timer will not be stopped when read.
+- PC0 toggle mode on timer interrupt removed
+
+    Required: OSS, DESC, DBG, ID libraries 
+    Switches: _ONE_NAMESPACE_PER_DRIVER_
+
+</pre>
+<a name="M11_GetEntry"><h2>Function M11_GetEntry()</h2></a>
+
+<h3>Syntax</h3>
+<pre>#ifdef _ONE_NAMESPACE_PER_DRIVER_
+    extern void LL_GetEntry( LL_ENTRY* drvP )
+#else
+    extern void M11_GetEntry( LL_ENTRY* drvP )
+#endif
+</pre><h3>Description</h3>
+<pre>Initialize driver's jump table
+
+</pre><h3>Input</h3>
+<pre>---
+</pre><h3>Output</h3>
+<pre>drvP  pointer to the initialized jump table structure
+</pre>
+<a name="M11_Init"><h2>Function M11_Init()</h2></a>
+
+<h3>Syntax</h3>
+<pre>static int32 M11_Init(
+    DESC_SPEC       *descP,
+    OSS_HANDLE      *osHdl,
+    MACCESS         *ma,
+    OSS_SEM_HANDLE  *devSemHdl,
+    OSS_IRQ_HANDLE  *irqHdl,
+    LL_HANDLE       **llHdlP
+)
+</pre><h3>Description</h3>
+<pre>Allocate and return low-level handle, initialize hardware
+
+The function initializes all channels with the 
+definitions made in the descriptor. The interrupt 
+is disabled.
+
+The following descriptor keys are used:
+
+Descriptor key        Default          Range
+--------------------  ---------------  -------------
+DEBUG_LEVEL_DESC      OSS_DBG_DEFAULT  see dbg.h
+DEBUG_LEVEL           OSS_DBG_DEFAULT  see dbg.h
+ID_CHECK              1                0..1 
+
+Note to ID_CHECK: Not all M11 modules have an IDPROM. 
+So ID_CHECK is disabled by default.
+</pre><h3>Input</h3>
+<pre>descSpec   pointer to descriptor data
+osHdl      oss handle
+ma         hw access handle
+devSemHdl  device semaphore handle
+irqHdl     irq handle
+</pre><h3>Output</h3>
+<pre>llHdlP     pointer to low-level driver handle
+return     success (0) or error code
+</pre>
+<a name="M11_Exit"><h2>Function M11_Exit()</h2></a>
+
+<h3>Syntax</h3>
+<pre>static int32 M11_Exit(
+   LL_HANDLE    **llHdlP
+)
+</pre><h3>Description</h3>
+<pre>De-initialize hardware and clean up memory
+
+The function deinitializes all channels by 
+disabling the timer and set all ports to input. 
+The interrupt is disabled.
+
+</pre><h3>Input</h3>
+<pre>llHdlP    pointer to low-level driver handle
+</pre><h3>Output</h3>
+<pre>return    success (0) or error code
+</pre>
+<a name="M11_Read"><h2>Function M11_Read()</h2></a>
+
+<h3>Syntax</h3>
+<pre>static int32 M11_Read(
+    LL_HANDLE *llHdl,
+    int32 ch,
+    int32 *valueP
+)
+</pre><h3>Description</h3>
+<pre>Read a value from the device
+
+The function reads the value from the current channel.
+
+Channels 0,1,2,3 (Port A,B,C,Hx): For all pins configured as inputs
+reads the raw unbuffered values. Pins configured as outputs return the
+value from the output latch.
+
+Channel 4 (Timer): Reads the current timer value
+
+If configured for 1X16 mode, Channel 1 does not exist. Channel 0 returns
+a 16 bit value (D15..D8 = Port A7..A0 and D7..D0 = Port B7..B0)
+
+</pre><h3>Input</h3>
+<pre>llHdl    low-level handle
+ch       current channel
+</pre><h3>Output</h3>
+<pre>valueP   read value
+return   success (0) or error code
+</pre>
+<a name="M11_Write"><h2>Function M11_Write()</h2></a>
+
+<h3>Syntax</h3>
+<pre>static int32 M11_Write(
+    LL_HANDLE *llHdl,
+    int32 ch,
+    int32 value
+)
+</pre><h3>Description</h3>
+<pre>Write a value to the device
+
+The function writes a value to the current channel.
+
+Channels 0,1,2 (Port A,B,C): directly updates all pins configured as 
+outputs.
+
+Channel 3 (Hx) returns always ERR_LL_ILL_DIR
+
+Channel 4 (Timer): writes the timer preload register. Restarts the 
+timer if it was started before.
+
+</pre><h3>Input</h3>
+<pre>llHdl    low-level handle
+ch       current channel
+value    value to write 
+</pre><h3>Output</h3>
+<pre>return   success (0) or error code
+</pre>
+<a name="M11_SetStat"><h2>Function M11_SetStat()</h2></a>
+
+<h3>Syntax</h3>
+<pre>static int32 M11_SetStat(
+    LL_HANDLE *llHdl,
+    int32  code,
+    int32  ch,
+    INT32_OR_64 value32_or_64
+)
+</pre><h3>Description</h3>
+<pre>Set the driver status
+
+The following status codes are supported:
+
+Code                 Description                     Values
+-------------------  ------------------------------  ----------
+M11_SETPINS          set pins in curr. channel
+M11_CLRPINS          clear pins in curr. channel
+M11_PORTCFG          define port A/B mode            M11_2X8/M11_1X16
+M11_PINDIR           setup data direction reg.       
+M11_SIGSET_H[1..4]   install signal for Hx pin       sigCode
+                     and enable Hx IRQ
+M11_SIGCLR_H[1..4]   remove signal for Hx pin        
+M11_HXSENSE          define polarity for Hx IRQ
+M_TMR_RUN            perform timer action            M_TMR_STOP
+                                                     M_TMR_START_ONE_SHOT
+                                                     M_TMR_START_FREE_RUNNING
+
+M_TMR_SIGSET_ZERO    install signal for timer        sigCode
+M_TMR_SIGCLR_ZERO    remove signal for timer         
+M_LL_DEBUG_LEVEL     driver debug level              see dbg.h
+M_MK_IRQ_ENABLE      interrupt enable                0..1
+M_LL_IRQ_COUNT       interrupt counter               0..max
+
+</pre><h3>Input</h3>
+<pre>llHdl          low-level handle
+code           status code
+ch             current channel
+value32_or_64  data or pointer to block 
+               data structure (M_SG_BLOCK)  (*)
+               (*) = for block status codes
+</pre><h3>Output</h3>
+<pre>return     success (0) or error code
+</pre>
+<a name="M11_GetStat"><h2>Function M11_GetStat()</h2></a>
+
+<h3>Syntax</h3>
+<pre>static int32 M11_GetStat(
+    LL_HANDLE *llHdl,
+    int32  code,
+    int32  ch,
+    INT32_OR_64 *value32_or_64P
+)
+</pre><h3>Description</h3>
+<pre>Get the driver status
+
+The following status codes are supported:
+
+Code                 Description                     Values
+-------------------  ------------------------------  ----------
+M11_PORTCFG          get port A/B mode               M11_2X8/M11_1X16
+M11_PINDIR           get data direction reg.       
+M11_SIGSET_H[1..4]   get install signal for Hx pin   sigCode
+M11_HXSENSE          get polarity of Hx IRQ
+M_TMR_RESOLUTION     get timer resolution (ticks/sec) 250000
+M_TMR_RUN            get timer state                 M_TMR_STOP
+                                                     M_TMR_START_ONE_SHOT
+                                                     M_TMR_START_FREE_RUNNING
+
+M_TMR_SIGSET_ZERO    get signal for timer            sigCode
+
+M_LL_DEBUG_LEVEL     driver debug level              see dbg.h
+M_LL_CH_NUMBER       number of channels              5
+M_LL_CH_DIR          direction of curr. chan.        M_CH_IN for ch 3
+                                                     M_CH_INOUT otherwise
+M_LL_CH_LEN          length of curr. ch. [bits]      see code
+M_LL_CH_TYP          description of curr. chan.      M_CH_BINARY fpr ch0..3
+                                                     M_CH_PROFILE_TMR ch4
+M_LL_IRQ_COUNT       interrupt counter               0..max
+M_LL_ID_CHECK        EEPROM is checked               0..1
+M_LL_ID_SIZE         EEPROM size [bytes]             128
+M_LL_BLK_ID_DATA     EEPROM raw data                 -
+M_MK_BLK_REV_ID      ident function table ptr        -
+
+</pre><h3>Input</h3>
+<pre>llHdl          low-level handle
+code           status code
+ch             current channel
+value32_or_64P pointer to block data structure (M_SG_BLOCK)(*) 
+               (*) = for block status codes
+</pre><h3>Output</h3>
+<pre>value32_or_64P data ptr or pointer to block data structure (M_SG_BLOCK)(*) 
+return         success (0) or error code
+               (*) = for block status codes
+</pre>
+<a name="M11_BlockRead"><h2>Function M11_BlockRead()</h2></a>
+
+<h3>Syntax</h3>
+<pre>static int32 M11_BlockRead(
+     LL_HANDLE *llHdl,
+     int32     ch,
+     void      *buf,
+     int32     size,
+     int32     *nbrRdBytesP
+)
+</pre><h3>Description</h3>
+<pre>Read a data block from the device (NOT SUPPORTED FOR M11)
+
+</pre><h3>Input</h3>
+<pre>llHdl        low-level handle
+ch           current channel
+buf          data buffer
+size         data buffer size
+</pre><h3>Output</h3>
+<pre>nbrRdBytesP  number of read bytes
+return       success (0) or error code
+</pre>
+<a name="M11_BlockWrite"><h2>Function M11_BlockWrite()</h2></a>
+
+<h3>Syntax</h3>
+<pre>static int32 M11_BlockWrite(
+     LL_HANDLE *llHdl,
+     int32     ch,
+     void      *buf,
+     int32     size,
+     int32     *nbrWrBytesP
+)
+</pre><h3>Description</h3>
+<pre>Write a data block to the device (NOT SUPPORTED FOR M11)
+
+</pre><h3>Input</h3>
+<pre>llHdl        low-level handle
+ch           current channel
+buf          data buffer
+size         data buffer size
+</pre><h3>Output</h3>
+<pre>nbrWrBytesP  number of written bytes
+return       success (0) or error code
+</pre>
+<a name="M11_Irq"><h2>Function M11_Irq()</h2></a>
+
+<h3>Syntax</h3>
+<pre>static int32 M11_Irq(
+   LL_HANDLE *llHdl
+)
+</pre><h3>Description</h3>
+<pre>Interrupt service routine
+
+The interrupt is triggered when a timer or Hx interrupt
+occurs.
+
+If the driver can detect the interrupt's cause it returns
+LL_IRQ_DEVICE or LL_IRQ_DEV_NOT, otherwise LL_IRQ_UNKNOWN.
+
+</pre><h3>Input</h3>
+<pre>llHdl    low-level handle
+</pre><h3>Output</h3>
+<pre>return   LL_IRQ_DEVICE    irq caused by device
+         LL_IRQ_DEV_NOT   irq not caused by device
+         LL_IRQ_UNKNOWN   unknown
+</pre>
+<a name="M11_Info"><h2>Function M11_Info()</h2></a>
+
+<h3>Syntax</h3>
+<pre>static int32 M11_Info(
+   int32  infoType,
+   ...
+)
+</pre><h3>Description</h3>
+<pre>Get information about hardware and driver requirements
+
+The following info codes are supported:
+
+Code                      Description
+------------------------  -----------------------------
+LL_INFO_HW_CHARACTER      hardware characteristics
+LL_INFO_ADDRSPACE_COUNT   nr of required address spaces
+LL_INFO_ADDRSPACE         address space information
+LL_INFO_IRQ               interrupt required
+LL_INFO_LOCKMODE          process lock mode required
+
+The LL_INFO_HW_CHARACTER code returns all address and 
+data modes (ORed) which are supported by the hardware
+(MDIS_MAxx, MDIS_MDxx).
+
+The LL_INFO_ADDRSPACE_COUNT code returns the number
+of address spaces used by the driver.
+
+The LL_INFO_ADDRSPACE code returns information about one
+specific address space (MDIS_MAxx, MDIS_MDxx). The returned 
+data mode represents the widest hardware access used by 
+the driver.
+
+The LL_INFO_IRQ code returns whether the driver supports an
+interrupt routine (TRUE or FALSE).
+
+The LL_INFO_LOCKMODE code returns which process locking
+mode the driver needs (LL_LOCK_xxx).
+
+</pre><h3>Input</h3>
+<pre>infoType     info code
+...          argument(s)
+</pre><h3>Output</h3>
+<pre>return       success (0) or error code
+</pre></body>
+</html>

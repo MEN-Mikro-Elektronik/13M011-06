@@ -1,0 +1,93 @@
+Program Description
+===================
+Tue Mar  7 10:07:54 WEST 2006
+ 
+Overview of all Programs
+------------------------
+
+m11_simp         - M11 example for port input
+m11_port_veri    - Verify M11 driver port functionality
+m11_read         - Read all M011 channels and configurations
+m11_write        - Configure and write to M011
+
+Program m11_simp
+----------------
+
+Usage:
+   m11_simp <device> <chan>
+
+Function:
+   M11 example for port input
+
+Options:
+   device       device name   
+   
+Description:
+   Simple example program for the M11 driver   
+   
+   Defines port A/B as inputs and read pins of port A/B   
+   
+Program m11_port_veri
+---------------------
+
+Usage:
+   m11_port_veri [<opts>] <device> [<opts>]
+
+Function:
+   Verify M11 driver port functionality
+
+Options:
+   
+Description:
+   Verify M11 driver port functionality    
+   Requires test connector with fixed cabling   
+   (all connections made with a 100 ohms resistor)   
+   
+   PA0 - H1   
+   PA1 - H2   
+   PA2 - H3   
+   PA3 - H4   
+   PB4 - PC0   
+   PB5 - PC1   
+   
+Program m11_read
+----------------
+
+Usage:
+   m11_read [<opts>] <device> [<opts>]
+
+Function:
+   Read all M011 channels and configurations
+
+Options:
+   -l           loop mode....................... [no]         
+   
+Description:
+   Read all M11 channels and print it out   
+   Doesn't change configuration   
+   
+Program m11_write
+-----------------
+
+Usage:
+   m11_write [<opts>] <device> [<opts>]
+
+Function:
+   Configure and write to M011
+
+Options:
+   -A=xx        set data direction for port A    [none]       
+   -B=xx        set data direction for port B    [none]       
+   -C=x         set data direction for port C    [none]       
+   -H=x         set polarity for H4..H1          [none]       
+   -G=2X8|1X16  set port A/B configuration       [none]       
+   -a=xx        write value xx to Port A                      
+   -b=xx        write value xx to Port B                      
+   -c=x         write value x  to Port C                      
+   -h=<pin>     set pin (e.g. -+=A4 set PA4)                  
+   -l=<pin>     clear pin (e.g. --=A4 clears PA4)             
+   
+Description:
+   Read all M11 channels and print it out   
+   Doesn't change configuration   
+   
