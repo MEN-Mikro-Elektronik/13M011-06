@@ -748,7 +748,7 @@ static int32 M11_SetStat(
 )
 {
     int32       value  = (int32)value32_or_64;  /* 32bit value     */
-    INT32_OR_64 valueP = value32_or_64;         /* stores 32/64bit pointer */
+    /* INT32_OR_64 valueP = value32_or_64;         /\* stores 32/64bit pointer *\/ ts: unused -> compiler warning */
 
 	int32 error = ERR_SUCCESS;
 
