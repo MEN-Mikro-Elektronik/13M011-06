@@ -30,7 +30,7 @@
  * Initial Revision
  *
  *---------------------------------------------------------------------------
- * (c) Copyright 1999 by MEN mikro elektronik GmbH, Nuernberg, Germany
+ * (c) Copyright 2015 by MEN mikro elektronik GmbH, Nuernberg, Germany
  ****************************************************************************/
 
 static const char RCSid[]="$Id: m_tmr_veri.c,v 1.3 2013/09/10 11:01:24 gv Exp $";
