@@ -84,11 +84,11 @@ static void usage(void)
 {
 	printf("Usage: m_tmr_veri [<opts>] <device> [<opts>]\n");
 	printf("Function: Verification tool for MDIS drivers implementing TMR profile\n");
-	printf("  device       device name..................... [none]    \n");
+	printf("  device       device name                     [none]    \n");
 	printf("Options:\n");
-	printf("  -c=<dec>     channel number...................[1]       \n");
+	printf("  -c=<dec>     channel number                  [1]       \n");
 	printf("\n");
-	printf("(c) 1999 by MEN mikro elektronik GmbH\n\n");
+	printf("(c) 1999-2015 MEN mikro elektronik GmbH\n\n");
 }
 
 /********************************* SigHandler ********************************

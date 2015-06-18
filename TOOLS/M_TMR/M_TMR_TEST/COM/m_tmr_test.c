@@ -304,7 +304,7 @@ static void TmrShow( MDIS_PATH path )
 
 	printf("TMR=0x%08x state=%s %s\n", value,
 		   start==M_TMR_STOP ? "stopped" : (start==M_TMR_START_ONE_SHOT ?
-											"one shot" : "free running"),
+			"one shot" : "free running"),
 		   sigs ? "*SIG*" : "");
 
 }
