@@ -71,7 +71,7 @@ static void usage(void)
 	printf("Function: Verification tool for MDIS drivers implementing TMR profile\n");
 	printf("  device       device name                     [none]    \n");
 	printf("Options:\n");
-	printf("  -c=<dec>     channel number                  [1]       \n");
+	printf("  -c=<dec>     channel number                  [1]...[max]\n");
 	printf("\n");
 	printf("Example: m_tmr_veri m11_1 -c=2                 verify channel 2\n");
 	printf("(c) 1999-2015 MEN mikro elektronik GmbH\n\n");
