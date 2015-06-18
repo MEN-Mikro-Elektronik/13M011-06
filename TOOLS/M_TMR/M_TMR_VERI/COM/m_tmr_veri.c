@@ -73,30 +73,11 @@ static void usage(void)
 	printf("(c) 1999-2015 MEN Mikro Elektronik GmbH\n\n");
 }
 
-/********************************* SigHandler ********************************
- *
- *  Description: Handle Signals
- *
- *
- *---------------------------------------------------------------------------
- *  Input......: sigCode		signal code
- *  Output.....: -
- *  Globals....: -
- ****************************************************************************/
 static void __MAPILIB SigHandler( u_int32 sigCode )
 {
 	G_sigCnt++;
 }
 
-/********************************* main *************************************
- *
- *  Description: Program main function
- *
- *---------------------------------------------------------------------------
- *  Input......: argc,argv	argument counter, data ..
- *  Output.....: return	    success (0) or error (1)
- *  Globals....: -
- ****************************************************************************/
 int main(int argc, char *argv[])
 {
 	MDIS_PATH	path=0;
