@@ -112,6 +112,7 @@ static const char RCSid[]="$Id: m11_drv.c,v 1.6 2013/09/10 11:11:29 gv Exp $";
 #define MOD_ID_SIZE			128			/* ID PROM size [bytes] */
 #define MOD_ID				11			/* ID PROM module ID */
 #define SPARE_COUNTER           1
+#define ADDITIONAL_COUNT	42
 
 /* latency */
 #define S_LATENCY
