@@ -52,7 +52,7 @@ static void PrintUosError(char *info);
 /* some new comment! */
 
 /* very new comment 12.47 uhr */
-
+/* another comment after CVSROOT correction */
 
 /********************************* usage ************************************
  *
