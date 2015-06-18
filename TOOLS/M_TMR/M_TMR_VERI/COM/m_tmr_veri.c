@@ -29,8 +29,6 @@
  * Revision 1.1  1999/11/03 15:40:11  kp
  * Initial Revision
  *
- *---------------------------------------------------------------------------
- * (c) Copyright 2015 by MEN mikro elektronik GmbH, Nuernberg, Germany
  ****************************************************************************/
 
 static const char RCSid[]="$Id: m_tmr_veri.c,v 1.3 2013/09/10 11:01:24 gv Exp $";
@@ -55,7 +53,7 @@ static void usage(void);
 static void PrintMdisError(char *info);
 static void PrintUosError(char *info);
 
-
+/* some new comment! */
 /********************************* usage ************************************
  *
  *  Description: Print program usage
@@ -72,7 +70,6 @@ static void usage(void)
 	printf("  device       device name                     [none]    \n");
 	printf("Options:\n");
 	printf("  -c=<dec>     channel                         [1]\n");
-	printf("\n\n\n");
 	printf("(c) 1999-2015 MEN Mikro Elektronik GmbH\n\n");
 }
 
