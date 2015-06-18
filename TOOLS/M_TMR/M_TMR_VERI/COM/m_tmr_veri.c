@@ -303,7 +303,7 @@ int main(int argc, char *argv[])
 	G_sigCnt = 0;
 	tmrTicks = timerResolution / 100;
 
-	printf("Generating periodic signals (100 per second)\n");
+	printf("Generating periodic signal with frequency 100 Hz\n");
 
 	if( M_write( path, tmrTicks ) < 0 ){
 		PrintMdisError("write preload");
