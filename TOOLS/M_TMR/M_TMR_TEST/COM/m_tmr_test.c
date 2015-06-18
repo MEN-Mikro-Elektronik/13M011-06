@@ -79,16 +79,16 @@ static void usage(void)
 {
 	printf("Usage: m_tmr_test [<opts>] <device> [<opts>]\n");
 	printf("Function: Test tool for MDIS drivers implementing TMR profile\n");
-	printf("  device       device name..................... [none]    \n");
+	printf("  device       device name                      [none]    \n");
 	printf("Options:\n");
-	printf("  -c=<dec>     channel number...................[1]       \n");
-	printf("  -o           start for one shot mode......... [no]      \n");
-	printf("  -f           start for free running mode..... [no]      \n");
-	printf("  -h           halt timer...................... [no]      \n");
-	printf("  -p=<dec>     set preload register............ [no]      \n");
-	printf("  -s           install signal.................. [no]      \n");
+	printf("  -c=<dec>     channel number                   [1]       \n");
+	printf("  -o           start for one shot mode          [no]      \n");
+	printf("  -f           start for free running mode      [no]      \n");
+	printf("  -h           halt timer                       [no]      \n");
+	printf("  -p=<dec>     set preload register             [no]      \n");
+	printf("  -s           install signal                   [no]      \n");
 	printf("\n");
-	printf("(c) 1999 by MEN mikro elektronik GmbH\n\n");
+	printf("(c) 1999-2015 MEN Mikro Elektronik GmbH\n\n");
 }
 
 /********************************* SigHandler ********************************
