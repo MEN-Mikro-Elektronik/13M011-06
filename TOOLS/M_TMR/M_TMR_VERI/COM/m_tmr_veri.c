@@ -72,7 +72,7 @@ static void usage(void)
 	printf("  device       device name                     [none]    \n");
 	printf("Options:\n");
 	printf("  -c=<dec>     channel                         [1]\n");
-	printf("\n");
+	printf("\n\n\n");
 	printf("(c) 1999-2015 MEN Mikro Elektronik GmbH\n\n");
 }
 
