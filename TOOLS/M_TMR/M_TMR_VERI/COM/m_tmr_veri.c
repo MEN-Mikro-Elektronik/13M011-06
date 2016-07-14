@@ -30,6 +30,7 @@
 static const char RCSid[]="$Id: m_tmr_veri.c,v 1.3 2013/09/10 11:01:24 gv Exp $";
 
 #include <stdio.h>
+#include <string.h>
 #include <stdlib.h>
 #include <MEN/men_typs.h>
 #include <MEN/usr_oss.h>
