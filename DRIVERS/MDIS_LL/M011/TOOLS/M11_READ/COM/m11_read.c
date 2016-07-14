@@ -34,6 +34,7 @@
 static const char RCSid[]="$Id: m11_read.c,v 1.3 2013/09/10 11:11:31 gv Exp $";
 
 #include <stdio.h>
+#include <string.h>
 #include <MEN/men_typs.h>
 #include <MEN/usr_oss.h>
 #include <MEN/usr_utl.h>
