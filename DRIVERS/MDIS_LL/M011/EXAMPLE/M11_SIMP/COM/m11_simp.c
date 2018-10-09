@@ -29,8 +29,6 @@
  * (c) Copyright 1999 by MEN mikro elektronik GmbH, Nuernberg, Germany
  ****************************************************************************/
 
-static const char RCSid[]="$Id: m11_simp.c,v 1.2 2013/09/10 11:11:37 gv Exp $";
-
 #include <stdio.h>
 #include <string.h>
 #include <MEN/men_typs.h>

@@ -34,8 +34,6 @@
  * (c) Copyright 1999 by MEN mikro elektronik GmbH, Nuernberg, Germany
  ****************************************************************************/
 
-static const char RCSid[]="$Id: m11_write.c,v 1.4 2013/09/10 11:11:33 gv Exp $";
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
