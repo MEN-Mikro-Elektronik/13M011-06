@@ -14,29 +14,23 @@
  *               _LL_DRV_
  *               S_LATENCY
  *
- *-------------------------------[ History ]---------------------------------
- *
- * $Log: m11_drv.h,v $
- * Revision 2.5  2013/09/10 11:11:44  gv
- * R: Porting to MDIS5
- * M: Changed according to MDIS Porting Guide 0.9
- *
- * Revision 2.4  2012/12/20 12:21:08  ts
- * R: cosmetics, c++ comments in code
- * M: reformatted code
- *
- * Revision 2.3  2012/12/05 10:20:53  ww
- * Added defines to supported m99_latency test.
- *
- * Revision 2.2  2004/04/26 17:49:32  cs
- * added swapped access defines
- *
- * Revision 2.1  1999/11/03 15:40:51  kp
- * Initial Revision
- *
  *---------------------------------------------------------------------------
  * (c) Copyright 1998 by MEN mikro elektronik GmbH, Nuernberg, Germany
  ****************************************************************************/
+/*
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 2 of the License, or
+* (at your option) any later version.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
 
 #ifndef _M11_DRV_H
 #define _M11_DRV_H

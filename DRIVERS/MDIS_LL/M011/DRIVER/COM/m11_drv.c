@@ -51,37 +51,23 @@
  *     Required: OSS, DESC, DBG, ID libraries
  *     Switches: _ONE_NAMESPACE_PER_DRIVER_
  *
- *-------------------------------[ History ]---------------------------------
- *
- * $Log: m11_drv.c,v $
- * Revision 1.6  2013/09/10 11:11:29  gv
- * R: Porting to MDIS5
- * M: Changed according to MDIS Porting Guide 0.9
- *
- * Revision 1.5  2012/12/05 10:29:30  ww
- * added set- and getstat calls to supported m99_latency test.
- * modified irq routine to handle timer interrupt of m99_latency test.
- *
- * Revision 1.4  2006/03/07 10:10:38  DPfeuffer
- * - bugfix: M11_SetStat(M11_SIGCLR_Hx): prevent to remove not installed signals
- * - M11_SetStat(), M11_GetStat(): M_TMR_XXX description fixed
- *
- * Revision 1.3  2004/04/26 17:49:07  cs
- * moved swapped variant defines to driver_sw.mak
- * replaced OSS_IrqMask/OSS_IrqUnMask with OSS_IrqMaskR/OSS_IrqRestore
- * minor typecasts for WIN2k compiler compatibility
- * bugix: fixed M11_Irq answer
- *        now output of LL_IRQ_DEVICE if interrupt caused by device
- *
- * Revision 1.2  2003/11/07 13:56:27  dschmidt
- * SET_HX_SENSE was wrong
- *
- * Revision 1.1  1999/11/03 15:40:38  kp
- * Initial Revision
- *
  *---------------------------------------------------------------------------
  * (c) Copyright 1999 by MEN Mikro Elektronik GmbH, Nuernberg, Germany
  ****************************************************************************/
+/*
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 2 of the License, or
+* (at your option) any later version.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
 
 static const char RCSid[]="$Id: m11_drv.c,v 1.6 2013/09/10 11:11:29 gv Exp $";
 
