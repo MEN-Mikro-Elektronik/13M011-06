@@ -3,8 +3,6 @@
  *         Name: m11_drv.h
  *
  *       Author: kp
- *        $Date: 2013/09/10 11:11:44 $
- *    $Revision: 2.5 $
  *
  *  Description: Header file for M11 driver
  *               - M11 specific status codes

@@ -5,8 +5,6 @@
  ****************************************************************************
  *
  *       Author: kp
- *        $Date: 2013/09/10 11:11:35 $
- *    $Revision: 1.2 $
  *
  *  Description: Verify M11 driver port functionality
  *               Requires test connector with fixed cabling
@@ -47,6 +45,8 @@
 #include <MEN/usr_utl.h>
 #include <MEN/mdis_api.h>
 #include <MEN/m11_drv.h>
+
+static const char IdentString[]=MENT_XSTR(MAK_REVISION);
 
 /*--------------------------------------+
 |   DEFINES                             |
@@ -93,7 +93,7 @@ static void usage(void)
 	printf("  device       device name..................... [none]    \n");
 	printf("Options:\n");
 	printf("\n");
-	printf("(c) 1999 by MEN mikro elektronik GmbH\n\n");
+	printf("Copyright (c) 1999-2019, MEN Mikro Elektronik GmbH\n%s\n", IdentString);
 }
 
 /********************************* SigHandler ********************************

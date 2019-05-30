@@ -4,8 +4,6 @@
  *      Project: M11 module driver (MDIS4)
  *
  *       Author: kp
- *        $Date: 2013/09/10 11:11:29 $
- *    $Revision: 1.6 $
  *
  *  Description: Low-level driver for M11 modules
  *
@@ -69,7 +67,6 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-static const char RCSid[]="$Id: m11_drv.c,v 1.6 2013/09/10 11:11:29 gv Exp $";
 
 #define _NO_LL_HANDLE		/* ll_defs.h: don't define LL_HANDLE struct */
 
@@ -201,6 +198,8 @@ typedef struct {
 /* include files which need LL_HANDLE */
 #include <MEN/ll_entry.h>   /* low-level driver jump table  */
 #include <MEN/m11_drv.h>   	/* M11 driver header file */
+
+static const char IdentString[]=MENT_XSTR(MAK_REVISION);
 
 /*-----------------------------------------+
 |  PROTOTYPES                              |

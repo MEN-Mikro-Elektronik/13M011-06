@@ -3,8 +3,6 @@
  *         Name: m_tmr_drv.h
  *
  *       Author: kp
- *        $Date: 1999/11/03 15:40:14 $
- *    $Revision: 2.1 $
  *
  *  Description: Header file for MDIS4 LL driver implementing M_TMR profile
  *               

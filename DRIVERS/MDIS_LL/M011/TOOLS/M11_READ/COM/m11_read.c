@@ -5,8 +5,6 @@
  ****************************************************************************
  *
  *       Author: kp
- *        $Date: 2013/09/10 11:11:31 $
- *    $Revision: 1.3 $
  *
  *  Description: Read all M11 channels and print it out
  *               Doesn't change configuration
@@ -39,6 +37,8 @@
 #include <MEN/usr_utl.h>
 #include <MEN/mdis_api.h>
 #include <MEN/m11_drv.h>
+
+static const char IdentString[]=MENT_XSTR(MAK_REVISION);
 
 /*--------------------------------------+
 |   DEFINES                             |
@@ -87,7 +87,7 @@ static void usage(void)
 	printf("Options:\n");
 	printf("  -l           loop mode....................... [no]      \n");
 	printf("\n");
-	printf("(c) 1999 by MEN mikro elektronik GmbH\n\n");
+	printf("Copyright (c) 1999-2019, MEN Mikro Elektronik GmbH\n%s\n", IdentString);
 }
 
 /********************************* SigHandler ********************************

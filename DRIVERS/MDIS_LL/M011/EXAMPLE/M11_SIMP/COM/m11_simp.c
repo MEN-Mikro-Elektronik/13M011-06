@@ -5,8 +5,6 @@
  ****************************************************************************
  *
  *       Author: kp
- *        $Date: 2013/09/10 11:11:37 $
- *    $Revision: 1.2 $
  *
  *  Description: Simple example program for the M11 driver
  *
@@ -39,6 +37,8 @@
 #include <MEN/mdis_api.h>
 #include <MEN/usr_oss.h>
 #include <MEN/m11_drv.h>
+
+static const char IdentString[]=MENT_XSTR(MAK_REVISION);
 
 /*--------------------------------------+
 |   DEFINES                             |

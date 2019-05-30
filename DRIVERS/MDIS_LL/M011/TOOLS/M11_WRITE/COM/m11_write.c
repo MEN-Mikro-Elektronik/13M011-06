@@ -5,8 +5,6 @@
  ****************************************************************************
  *
  *       Author: kp
- *        $Date: 2013/09/10 11:11:33 $
- *    $Revision: 1.4 $
  *
  *  Description: Read all M11 channels and print it out
  *               Doesn't change configuration
@@ -40,6 +38,8 @@
 #include <MEN/usr_utl.h>
 #include <MEN/mdis_api.h>
 #include <MEN/m11_drv.h>
+
+static const char IdentString[]=MENT_XSTR(MAK_REVISION);
 
 /*--------------------------------------+
 |   DEFINES                             |
@@ -94,7 +94,7 @@ static void usage(void)
 	printf("  -h=<pin>     set pin (e.g. -+=A4 set PA4)               \n");
 	printf("  -l=<pin>     clear pin (e.g. --=A4 clears PA4)          \n");
 	printf("\n");
-	printf("(c) 1999 by MEN mikro elektronik GmbH\n\n");
+	printf("Copyright (c) 1999-2019, MEN Mikro Elektronik GmbH\n%s\n", IdentString);
 }
 
 /********************************* main *************************************

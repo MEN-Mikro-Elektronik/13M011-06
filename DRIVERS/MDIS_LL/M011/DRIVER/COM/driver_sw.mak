@@ -1,8 +1,6 @@
 #***************************  M a k e f i l e  *******************************
 #
 #         Author: kp
-#          $Date: 2004/04/26 17:49:15 $
-#      $Revision: 1.1 $
 #
 #    Description: Makefile definitions for the M11 driver swapped variant
 #
@@ -23,8 +21,13 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 MAK_NAME=m11_sw
+# the next line is updated during the MDIS installation
+STAMPED_REVISION="13M011-06_02_06-1-gfb04cfc-dirty_2019-05-10"
+
+DEF_REVISION=MAK_REVISION=$(STAMPED_REVISION)
 
 MAK_SWITCH=$(SW_PREFIX)MAC_MEM_MAPPED \
+		$(SW_PREFIX)$(DEF_REVISION) \
 		$(SW_PREFIX)MAC_BYTESWAP \
 		$(SW_PREFIX)ID_SW
 

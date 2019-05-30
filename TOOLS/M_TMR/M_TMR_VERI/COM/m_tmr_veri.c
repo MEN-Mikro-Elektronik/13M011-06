@@ -1,8 +1,6 @@
 /****************************************************************************
  *
  *       Author: kp
- *        $Date: 2013/09/10 11:01:24 $
- *    $Revision: 1.3 $
  *
  *  Description: Verification tool for MDIS drivers implementing TMR profile
  *
@@ -11,6 +9,8 @@
  *     Required: libraries: mdis_api, usr_oss, usr_utl
  *     Switches: -
  *
+ *---------------------------------------------------------------------------
+ * Copyright (c) 1999-2019, MEN Mikro Elektronik GmbH
  ****************************************************************************/
  /*
  * This program is free software: you can redistribute it and/or modify
@@ -35,6 +35,8 @@
 #include <MEN/usr_utl.h>
 #include <MEN/mdis_api.h>
 #include <MEN/m_tmr_drv.h>
+
+static const char IdentString[]=MENT_XSTR(MAK_REVISION);
 
 /*--------------------------------------+
 |   GLOBALS                             |
@@ -69,7 +71,7 @@ static void usage(void)
 	printf("  device       device name                     [none]    \n");
 	printf("Options:\n");
 	printf("  -c=<dec>     channel                         [1]\n");
-	printf("(c) 1999-2015 MEN Mikro Elektronik GmbH\n\n");
+	printf("Copyright (c) 1999-2019, MEN Mikro Elektronik GmbH\n%s\n", IdentString);
 }
 
 static void __MAPILIB SigHandler( u_int32 sigCode )
