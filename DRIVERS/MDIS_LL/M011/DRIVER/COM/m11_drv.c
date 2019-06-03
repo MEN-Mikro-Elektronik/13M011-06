@@ -199,6 +199,7 @@ typedef struct {
 #include <MEN/ll_entry.h>   /* low-level driver jump table  */
 #include <MEN/m11_drv.h>   	/* M11 driver header file */
 
+static const char IdentString[]=MENT_XSTR(MAK_REVISION);
 
 /*-----------------------------------------+
 |  PROTOTYPES                              |
@@ -1647,7 +1648,7 @@ static int32 M11_Info(
  ****************************************************************************/
 static char* Ident( void )	/* nodoc */
 {
-    return( "M11 - M11 low level driver: $Id: m11_drv.c,v 1.6 2013/09/10 11:11:29 gv Exp $" );
+    return( (char*) IdentString );
 }
 
 /********************************* Cleanup **********************************
