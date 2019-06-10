@@ -3,8 +3,8 @@
 <package xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="packagedesc.xsd">
 	<name>13m01106</name>
 	<description>MDIS5 driver package for MEN M11 M-Module</description>
-	<date>2016-07-14</date>
-	<revision>2.5</revision>
+	<date>2019-06-07</date>
+	<revision>13M011-06_02_06-5-gf3b0f7a</revision>
 	<docroot>DRIVERS/MDIS_LL/M011/DOC/m11_drv.html</docroot>
 	<modellist>
 		<model>
