@@ -1,7 +1,7 @@
 /*********************  P r o g r a m  -  M o d u l e ***********************
  *
  *         Name: m11_drv.c
- *      Project: M11 module driver (MDIS4)
+ *      Project: M11 module driver (MDIS5)
  *
  *       Author: kp
  *
