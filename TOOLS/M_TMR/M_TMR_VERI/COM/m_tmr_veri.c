@@ -10,7 +10,7 @@
  *     Switches: -
  *
  *---------------------------------------------------------------------------
- * Copyright (c) 1999-2019, MEN Mikro Elektronik GmbH
+ * Copyright 1999-2019, MEN Mikro Elektronik GmbH
  ****************************************************************************/
  /*
  * This program is free software: you can redistribute it and/or modify
@@ -71,7 +71,7 @@ static void usage(void)
 	printf("  device       device name                     [none]    \n");
 	printf("Options:\n");
 	printf("  -c=<dec>     channel                         [1]\n");
-	printf("Copyright (c) 1999-2019, MEN Mikro Elektronik GmbH\n%s\n", IdentString);
+	printf("Copyright 1999-2019, MEN Mikro Elektronik GmbH\n%s\n", IdentString);
 }
 
 static void __MAPILIB SigHandler( u_int32 sigCode )
